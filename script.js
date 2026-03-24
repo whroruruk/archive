@@ -1,7 +1,7 @@
 const canvas = document.getElementById('storyCanvas');
 const ctx = canvas.getContext('2d');
 let coverImage = new Image();
-coverImage.crossOrigin = "Anonymous"; // 브라우저 보안 검역 통과 설정
+coverImage.crossOrigin = "Anonymous"; // 보안 경계 통과 설정
 const TTB_KEY = 'ttbtwinwhee0938001';
 
 async function searchBook() {
@@ -11,6 +11,7 @@ async function searchBook() {
     resultsDiv.innerHTML = '<div style="padding:10px;">검색 중...</div>';
     resultsDiv.style.display = 'block';
 
+    // API 검색은 텍스트 데이터이므로 allorigins를 사용해도 무방합니다.
     const apiUrl = `https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${TTB_KEY}&Query=${encodeURIComponent(query)}&QueryType=Title&MaxResults=5&start=1&SearchTarget=Book&output=js&Version=20131101`;
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
 
@@ -30,7 +31,7 @@ async function searchBook() {
                 item.onclick = () => {
                     const highRes = book.cover.replace('coversum/', 'cover500/');
                     
-                    // 핵심 수정: 이미지 전용 프록시 wsrv.nl 사용 (가장 안정적)
+                    // 이미지 전용 프록시 wsrv.nl 사용 (CORS 에러 완벽 방지)
                     const imageProxyUrl = `https://wsrv.nl/?url=${encodeURIComponent(highRes)}`;
                     
                     coverImage.onload = () => { 
@@ -38,10 +39,10 @@ async function searchBook() {
                         draw(); 
                     };
                     coverImage.onerror = () => {
-                        alert("이미지를 불러오는 데 실패했습니다. 네트워크 상태를 확인해 주세요.");
+                        alert("이미지를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.");
                     };
                     
-                    // 프록시 주소를 이미지 소스로 지정
+                    // 프록시 주소를 바로 삽입하여 보안 검역 우회
                     coverImage.src = imageProxyUrl; 
                     
                     document.getElementById('bookTitleInput').value = book.title;
@@ -52,7 +53,7 @@ async function searchBook() {
         } else { resultsDiv.innerHTML = '<div style="padding:10px;">결과 없음</div>'; }
     } catch (e) { 
         console.error("Search Error:", e);
-        resultsDiv.innerHTML = '<div style="padding:10px;">검색 서버 일시 오류</div>';
+        resultsDiv.innerHTML = '<div style="padding:10px;">서버 응답 지연 (다시 시도해 주세요)</div>';
     }
 }
 
@@ -71,7 +72,6 @@ function applyPalette() {
         
         const pixels = tCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
         const colors = {};
-        // 픽셀 샘플링 (성능과 정확도의 균형)
         for (let i = 0; i < pixels.length; i += 200) { 
             const rgb = `${pixels[i]},${pixels[i+1]},${pixels[i+2]}`;
             colors[rgb] = (colors[rgb] || 0) + 1;
@@ -89,8 +89,7 @@ function applyPalette() {
         document.getElementById('textColor').value = (r*299 + g*587 + b*114)/1000 > 128 ? "#000000" : "#ffffff";
         draw();
     } catch (e) {
-        console.error(e);
-        alert("이미지 보안 정책으로 인해 색상을 추출할 수 없습니다.");
+        alert("이미지 보안 정책으로 인해 색상을 추출할 수 없습니다. 수동으로 설정해 주세요.");
     }
 }
 
@@ -107,7 +106,6 @@ function draw() {
         const yPosRatio = parseFloat(document.getElementById('textYPos').value);
         const lineFactor = parseFloat(document.getElementById('lineHeightRange').value);
 
-        // 배경 그리기
         const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
         grad.addColorStop(0, c1); grad.addColorStop(1, c2);
         ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -117,7 +115,6 @@ function draw() {
         const maxWidth = 850;
         const xStart = (canvas.width - maxWidth) / 2;
         
-        // 문장 줄바꿈 로직
         const paragraphs = text.split('\n');
         let allLines = [];
         paragraphs.forEach(p => {
@@ -143,7 +140,6 @@ function draw() {
         const totalH = allLines.length * lineHeight;
         let currentY = (canvas.height * yPosRatio) - (totalH / 2) + fontSize;
 
-        // 문장 출력 (양끝 정렬 포함)
         ctx.textAlign = 'left';
         allLines.forEach(lineObj => {
             const chars = lineObj.chars;
@@ -162,7 +158,6 @@ function draw() {
             currentY += lineHeight;
         });
 
-        // 표지 이미지 및 정보 출력
         const baseMargin = 115; 
         const coverW = 260;
         if (coverImage.src && coverImage.complete) {
