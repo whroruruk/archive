@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 </head>
 <body>
+
 <div class="container">
     <div id="canvas-wrapper">
         <canvas id="storyCanvas" width="1080" height="1920"></canvas>
@@ -50,13 +51,32 @@
             </div>
         </div>
         <div class="color-grid">
-            <div class="color-item"><label>배경1</label><div class="color-input-wrapper"><input type="color" id="color1" value="#667eea" onchange="draw()"><button class="btn-mini" onclick="setSingleColor()">단색</button></div></div>
-            <div class="color-item"><label>배경2</label><div class="color-input-wrapper"><input type="color" id="color2" value="#764ba2" onchange="draw()"><button class="btn-mini" onclick="applyPalette()">🎨 맞춤</button></div></div>
-            <div class="color-item"><label>글자색</label><div class="color-input-wrapper"><input type="color" id="textColor" value="#ffffff" onchange="draw()"></div></div>
+            <div class="color-item">
+                <label>배경1</label>
+                <div class="color-input-wrapper">
+                    <input type="color" id="color1" value="#667eea" onchange="draw()">
+                    <button class="btn-mini" onclick="setSingleColor()">단색</button>
+                </div>
+            </div>
+            <div class="color-item">
+                <label>배경2</label>
+                <div class="color-input-wrapper">
+                    <input type="color" id="color2" value="#764ba2" onchange="draw()">
+                    <button class="btn-mini" onclick="applyPalette()">🎨 맞춤</button>
+                </div>
+            </div>
+            <div class="color-item">
+                <label>글자색</label>
+                <div class="color-input-wrapper">
+                    <input type="color" id="textColor" value="#ffffff" onchange="draw()">
+                </div>
+            </div>
         </div>
         <button class="btn-download" onclick="downloadImage()">이미지 저장하기</button>
     </div>
 </div>
-<script src="./script.js"></script> 
+
+<script src="script.js"></script>
+
 </body>
 </html>
