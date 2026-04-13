@@ -197,4 +197,25 @@ function downloadImage() {
     link.href = canvas.toDataURL('image/png');
     link.click();
 }
-window.onload = () => setTimeout(draw, 500);
+const EXAMPLE_TEXT = '"모든 위대한 것들은 단순하다."';
+
+window.onload = () => {
+    const textInput = document.getElementById('textInput');
+    textInput.value = EXAMPLE_TEXT;
+
+    textInput.addEventListener('focus', function() {
+        if (this.value === EXAMPLE_TEXT) {
+            this.value = '';
+            draw();
+        }
+    });
+
+    textInput.addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+            this.value = EXAMPLE_TEXT;
+            draw();
+        }
+    });
+
+    setTimeout(draw, 500);
+};

@@ -1,13 +1,15 @@
 body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #1a1a1a; color: #fff; margin: 0; display: flex; justify-content: center; }
 .container { display: flex; flex-direction: row; gap: 40px; padding: 40px; max-width: 1200px; width: 100%; align-items: flex-start; box-sizing: border-box; }
 #canvas-wrapper { position: sticky; top: 40px; flex: 0 0 auto; }
-canvas { border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); width: 360px; height: auto; background: #000; }
+canvas { border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); width: 360px; height: auto; background: #000; display: block; }
 .controls { background: #2d2d2d; padding: 30px; border-radius: 20px; flex: 1; max-width: 500px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; }
 h2 { margin: 0; color: #e94e77; font-size: 24px; }
 .group { display: flex; flex-direction: column; gap: 8px; }
 label { font-size: 13px; color: #bbb; font-weight: bold; }
-textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #444; color: white; font-size: 16px; box-sizing: border-box; min-height: 100px; resize: vertical; }
+textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #444; color: white; font-size: 16px; box-sizing: border-box; min-height: 100px; resize: vertical; line-height: 1.5; }
+textarea::placeholder { color: #777; font-style: italic; }
 input[type="text"], select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #444; color: white; font-size: 16px; box-sizing: border-box; }
+input[type="range"] { width: 100%; cursor: pointer; accent-color: #e94e77; padding: 8px 0; box-sizing: content-box; }
 #search-results { max-height: 250px; overflow-y: auto; background: #3d3d3d; border-radius: 8px; display: none; margin-top: 5px; border: 1px solid #555; }
 .search-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #444; display: flex; align-items: center; gap: 12px; }
 .search-item:hover { background: #4e4e4e; }
@@ -18,11 +20,24 @@ input[type="text"], select { width: 100%; padding: 12px; border-radius: 8px; bor
 input[type="color"] { width: 30px; height: 30px; border: none; background: none; cursor: pointer; padding: 0; }
 .btn-mini { padding: 6px; font-size: 11px; background: #555; border: none; color: #fff; border-radius: 4px; cursor: pointer; white-space: nowrap; flex: 1; }
 .btn-mini:hover { background: #666; }
-.btn-download { background: #e94e77; color: white; padding: 18px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+.btn-download { background: #e94e77; color: white; padding: 18px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; width: 100%; }
+.btn-download:hover { background: #d44068; }
+.btn-download:active { background: #c0395e; }
 
 @media (max-width: 950px) {
-    .container { flex-direction: column; align-items: center; padding: 20px; }
-    #canvas-wrapper { position: relative; top: 0; width: 100%; display: center; }
-    canvas { width: 100%; max-width: 340px; }
+    .container { flex-direction: column; align-items: center; padding: 20px; gap: 20px; }
+    #canvas-wrapper { position: relative; top: 0; width: 100%; display: flex; justify-content: center; }
+    canvas { width: 100%; max-width: 360px; }
     .controls { width: 100%; max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 12px; gap: 12px; }
+    .controls { padding: 16px; gap: 14px; border-radius: 16px; }
+    h2 { font-size: 20px; }
+    label { font-size: 12px; }
+    textarea { min-height: 90px; font-size: 15px; }
+    input[type="text"], select { font-size: 15px; padding: 10px; }
+    .color-grid { gap: 8px; }
+    .btn-download { padding: 16px; font-size: 15px; border-radius: 12px; }
 }
