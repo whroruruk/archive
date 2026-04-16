@@ -2,7 +2,7 @@ const canvas = document.getElementById('storyCanvas');
 const ctx = canvas.getContext('2d');
 let coverImage = new Image();
 coverImage.crossOrigin = "Anonymous"; // 보안 경계 통과 설정
-const TTB_KEY = 'ttbtwinwhee0938001';
+const TTB_KEY = 'ttbtwinwhee0938002';
 
 async function searchBook() {
     const query = document.getElementById('bookSearch').value;
